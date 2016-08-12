@@ -6,15 +6,31 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by bratuhia on 04.08.2016.
  */
 public class MavenDependencyBuilderTest {
+
+	@Test
+	public void testProjectEquals() {
+		Project p1 = new Project(1, "project", new ArrayList<>());
+		Project p2 = new Project(2, "project", null);
+		assertEquals(p1, p2);
+	}
+
+	@Test
+	public void testProjectNotEquals() {
+		Project p1 = new Project(1, "project1", null);
+		Project p2 = new Project(1, "project2", null);
+		assertNotEquals(p1, p2);
+	}
 
 	@Test
 	public void testBuildDependencies0() throws IOException {

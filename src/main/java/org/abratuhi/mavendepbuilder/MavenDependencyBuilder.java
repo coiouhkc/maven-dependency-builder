@@ -63,7 +63,7 @@ public class MavenDependencyBuilder {
 				});
 
 		// build directed graph in gml notation (using wikipedia example as reference)
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("graph [ \n");
 		sb.append("directed 1 \n");
 		projects.forEach(project -> {
