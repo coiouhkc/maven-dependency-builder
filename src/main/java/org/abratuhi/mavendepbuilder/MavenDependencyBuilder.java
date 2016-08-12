@@ -5,14 +5,15 @@ import org.abratuhi.mavendepbuilder.model.JavaClass;
 import org.abratuhi.mavendepbuilder.model.Project;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -22,17 +23,21 @@ import java.util.TreeSet;
  */
 public class MavenDependencyBuilder {
 
+	private final static Logger LOGGER = Logger.getLogger(MavenDependencyBuilder.class);
+
 	@Getter final Map<String, Project> classProjectMap = new HashMap<>();
 	@Getter final Map<Project, Map<Project, Set<String>>> fromToDepclassesMap = new HashMap<>();
 
-	public void buildDependencies(List<Project> projects) throws IOException {
+	public void buildDependencies(Set<Project> projects) throws IOException {
 		buildDependencies(projects, new File("dependencies.gml"));
 	}
 
-	public void buildDependencies(List<Project> projects, File toFile) throws IOException {
+	public void buildDependencies(Set<Project> projects, File toFile) throws IOException {
 		// set numerical ids
-		for (int i = 1; i<=projects.size(); i++) {
-			projects.get(i-1).setId(i);
+		Iterator<Project> iterator = projects.iterator();
+		for (int i = 1; iterator.hasNext(); i++) {
+			Project project = iterator.next();
+			project.setId(i);
 		}
 
 		// fill map className -> project
@@ -73,14 +78,10 @@ public class MavenDependencyBuilder {
 					sb.append("edge [ \n");
 					sb.append("source " + from.getId() + " \n");
 					sb.append("target " + to.getId() + " \n");
-					sb.append("label \" \n");
-					if (fromToDepclassesMap.get(from).get(to).size() < 5) {
+					sb.append("label \"");
 						fromToDepclassesMap.get(from).get(to).forEach(classImport -> {
-							sb.append(classImport + "\n");
+							sb.append(classImport + " ");
 						});
-					} else {
-						sb.append("5+ \n");
-					}
 					sb.append("\" \n");
 					sb.append("] \n");
 				}
@@ -98,8 +99,8 @@ public class MavenDependencyBuilder {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<Project> visitDirectory(File dir) throws IOException {
-		final List<Project> result = new ArrayList<>();
+	public Set<Project> visitDirectory(File dir) throws IOException {
+		final Set<Project> result = new HashSet<>();
 		if (!dir.isDirectory()) {
 			return result;
 		}
@@ -118,7 +119,7 @@ public class MavenDependencyBuilder {
 							JavaClass clazz = visitJavaClass(path.toFile());
 							project.getClasses().add(clazz);
 						} catch (IOException e) {
-							e.printStackTrace();
+							LOGGER.error(e);
 						}
 					});
 		}
@@ -132,7 +133,7 @@ public class MavenDependencyBuilder {
 			try {
 				result.addAll(visitDirectory(path.toFile()));
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.error(e);
 			}
 		});
 

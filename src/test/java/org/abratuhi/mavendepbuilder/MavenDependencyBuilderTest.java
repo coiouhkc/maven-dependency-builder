@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -19,7 +19,7 @@ public class MavenDependencyBuilderTest {
 	@Test
 	public void testBuildDependencies0() throws IOException {
 		MavenDependencyBuilder mdb = new MavenDependencyBuilder();
-		List<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-0"));
+		Set<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-0"));
 		mdb.buildDependencies(projects);
 		assertEquals(3, mdb.getClassProjectMap().size());
 		assertEquals(0, mdb.getNumberOfDependenciesBetweenProjects());
@@ -28,7 +28,7 @@ public class MavenDependencyBuilderTest {
 	@Test
 	public void testBuildDependencies1() throws IOException {
 		MavenDependencyBuilder mdb = new MavenDependencyBuilder();
-		List<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-1"));
+		Set<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-1"));
 		mdb.buildDependencies(projects);
 		assertEquals(3, mdb.getClassProjectMap().size());
 		assertEquals(1, mdb.getNumberOfDependenciesBetweenProjects());
@@ -37,8 +37,8 @@ public class MavenDependencyBuilderTest {
 	@Test
 	public void testVisitDirectory() throws IOException {
 		MavenDependencyBuilder mdb = new MavenDependencyBuilder();
-		List<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-0"));
-		assertEquals(3, projects.size());
+		Set<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-0"));
+		assertEquals(4, projects.size());
 	}
 
 	@Test
