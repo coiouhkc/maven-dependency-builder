@@ -3,6 +3,12 @@ package org.abratuhi.mavendepbuilder;
 import lombok.Getter;
 import org.abratuhi.mavendepbuilder.model.JavaClass;
 import org.abratuhi.mavendepbuilder.model.Project;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -176,5 +182,33 @@ public class MavenDependencyBuilder {
 				.flatMap(set -> set.stream())
 				.mapToInt(set -> set.size())
 				.sum();
+	}
+
+
+	public static void main (String [] args) throws ParseException, IOException {
+		Options options = new Options();
+		options.addOption("i", "inputDirectory", true, "Input directory to parse for maven projects");
+		options.addOption("o", "outputFile", true, "Output file in gml format");
+
+		CommandLineParser parser = new PosixParser();
+		CommandLine cmd = parser.parse(options, args);
+
+		String in = null;
+		String out = null;
+		if (cmd.hasOption("i")) {
+			in = cmd.getOptionValue("i");
+		}
+		if (cmd.hasOption("o")) {
+			out = cmd.getOptionValue("o");
+		}
+
+		if (StringUtils.isEmpty(in) || StringUtils.isEmpty(out)) {
+			new HelpFormatter().printHelp("java -jar <this_lib>", options);
+			return;
+		}
+
+		MavenDependencyBuilder mavenDependencyBuilder = new MavenDependencyBuilder();
+		Set<Project> projects = mavenDependencyBuilder.visitDirectory(new File(in));
+		mavenDependencyBuilder.buildDependencies(projects, new File(out));
 	}
 }
