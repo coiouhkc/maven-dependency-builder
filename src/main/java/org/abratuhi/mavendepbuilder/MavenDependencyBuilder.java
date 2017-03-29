@@ -1,7 +1,10 @@
 package org.abratuhi.mavendepbuilder;
 
 import lombok.Getter;
+import org.abratuhi.mavendepbuilder.gml.GMLLayout;
+import org.abratuhi.mavendepbuilder.graphml.GraphMLLayout;
 import org.abratuhi.mavendepbuilder.model.JavaClass;
+import org.abratuhi.mavendepbuilder.model.JavaPackage;
 import org.abratuhi.mavendepbuilder.model.Project;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -25,78 +28,18 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Created by bratuhia on 04.08.2016.
+ * @author Alexei Bratuhin
  */
 public class MavenDependencyBuilder {
 
-	private final static Logger LOGGER = Logger.getLogger(MavenDependencyBuilder.class);
+	private static final Logger LOGGER = Logger.getLogger(MavenDependencyBuilder.class);
 
-	@Getter final Map<String, Project> classProjectMap = new HashMap<>();
-	@Getter final Map<Project, Map<Project, Set<String>>> fromToDepclassesMap = new HashMap<>();
-
-	public void buildDependencies(Set<Project> projects) throws IOException {
-		buildDependencies(projects, new File("dependencies.gml"));
-	}
-
-	public void buildDependencies(Set<Project> projects, File toFile) throws IOException {
-		// set numerical ids
-		Iterator<Project> iterator = projects.iterator();
-		for (int i = 1; iterator.hasNext(); i++) {
-			Project project = iterator.next();
-			project.setId(i);
+	public void buildDependencies(Set<Project> projects, File toFile, final String format) throws IOException {
+		switch (format) {
+		case "gml": {new GMLLayout().buildDependencies(projects, toFile); break; }
+		case "graphml": {new GraphMLLayout().buildDependencies(projects, toFile); break;}
+		default: throw new IllegalArgumentException("Unsupported format: " + format);
 		}
-
-		// fill map className -> project
-		projects.parallelStream()
-				.forEach(project -> project.getClasses()
-						.forEach(javaClass -> classProjectMap.put(javaClass.getName(), project)));
-
-		// fill multimap <fromProject, toProject> -> importedClases
-		projects.stream()
-				.forEach(from -> {
-					fromToDepclassesMap.put(from, new HashMap<>());
-					from.getClasses()
-						.forEach(javaClass -> javaClass.getImports()
-								.forEach(importClass -> {
-									Project to = classProjectMap.get(importClass);
-									if (to != null) {
-										if (!fromToDepclassesMap.get(from).containsKey(to)) {
-											fromToDepclassesMap.get(from).put(to, new TreeSet<>());
-										}
-										fromToDepclassesMap.get(from).get(to).add(importClass);
-									}
-								}));
-				});
-
-		// build directed graph in gml notation (using wikipedia example as reference)
-		StringBuilder sb = new StringBuilder();
-		sb.append("graph [ \n");
-		sb.append("directed 1 \n");
-		projects.forEach(project -> {
-			sb.append("node [ \n");
-			sb.append("id " + project.getId() + " \n");
-			sb.append("label \"" + project.getName() + "\" \n");
-			sb.append("] \n");
-		});
-		fromToDepclassesMap.keySet().forEach(from -> {
-			fromToDepclassesMap.get(from).keySet().forEach(to -> {
-				if (! from.getName().equals(to.getName())) {
-					sb.append("edge [ \n");
-					sb.append("source " + from.getId() + " \n");
-					sb.append("target " + to.getId() + " \n");
-					sb.append("label \"");
-						fromToDepclassesMap.get(from).get(to).forEach(classImport -> {
-							sb.append(classImport + " ");
-						});
-					sb.append("\" \n");
-					sb.append("] \n");
-				}
-			});
-		});
-		sb.append("] \n");
-
-		// write result to file
-		FileUtils.writeStringToFile(toFile, sb.toString());
 	}
 
 	/**
@@ -124,6 +67,10 @@ public class MavenDependencyBuilder {
 						try {
 							JavaClass clazz = visitJavaClass(path.toFile());
 							project.getClasses().add(clazz);
+
+							JavaPackage pakkage = project.getPackageByName(clazz.getPakkage()).orElse(new JavaPackage(clazz.getPakkage()));
+							pakkage.getClasses().add(clazz);
+							project.getPackages().add(pakkage);
 						} catch (IOException e) {
 							LOGGER.error(e);
 						}
@@ -134,8 +81,7 @@ public class MavenDependencyBuilder {
 			result.add(project);
 		}
 
-		Files.list(dir.toPath())
-				.forEach(path -> {
+		Files.list(dir.toPath()).forEach(path -> {
 			try {
 				result.addAll(visitDirectory(path.toFile()));
 			} catch (IOException e) {
@@ -164,6 +110,7 @@ public class MavenDependencyBuilder {
 			if (line.startsWith("package")) {
 				String sPackage = line.replaceAll("package", "").replaceAll(";", "").trim();
 				String sName = javaClass.getName().replaceAll("\\.java", "");
+				clazz.setPakkage(sPackage);
 				clazz.setName(sPackage + "." + sName);
 			}
 
@@ -176,30 +123,26 @@ public class MavenDependencyBuilder {
 		return clazz;
 	}
 
-	public int getNumberOfDependenciesBetweenProjects() {
-		return fromToDepclassesMap.values().stream()
-				.map(map -> map.values())
-				.flatMap(set -> set.stream())
-				.mapToInt(set -> set.size())
-				.sum();
-	}
-
-
 	public static void main (String [] args) throws ParseException, IOException {
 		Options options = new Options();
 		options.addOption("i", "inputDirectory", true, "Input directory to parse for maven projects");
 		options.addOption("o", "outputFile", true, "Output file in gml format");
+		options.addOption("f", "format", true, "gml/graphml");
 
 		CommandLineParser parser = new PosixParser();
 		CommandLine cmd = parser.parse(options, args);
 
 		String in = null;
 		String out = null;
+		String format = null;
 		if (cmd.hasOption("i")) {
 			in = cmd.getOptionValue("i");
 		}
 		if (cmd.hasOption("o")) {
 			out = cmd.getOptionValue("o");
+		}
+		if (cmd.hasOption("f")) {
+			format = cmd.getOptionValue("f");
 		}
 
 		if (StringUtils.isEmpty(in) || StringUtils.isEmpty(out)) {
@@ -209,6 +152,6 @@ public class MavenDependencyBuilder {
 
 		MavenDependencyBuilder mavenDependencyBuilder = new MavenDependencyBuilder();
 		Set<Project> projects = mavenDependencyBuilder.visitDirectory(new File(in));
-		mavenDependencyBuilder.buildDependencies(projects, new File(out));
+		mavenDependencyBuilder.buildDependencies(projects, new File(out), format);
 	}
 }
