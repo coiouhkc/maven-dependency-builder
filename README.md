@@ -18,3 +18,5 @@ usage: java -jar <this_lib>
  -i,--inputDirectory <arg>   Input directory to parse for maven projects
  -o,--outputFile <arg>       Output file in gml format
 ```
+# Notes
+This tool assumes unique maven project names and unique class names.
