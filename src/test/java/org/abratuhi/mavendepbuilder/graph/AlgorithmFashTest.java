@@ -28,7 +28,7 @@ public class AlgorithmFashTest {
 
 	@Test
 	public void testOneNode() {
-		Graph<String, String> g = new Graph<>(Collections.singletonList(new Node<String, String>(null, new ArrayList<>())));
+		Graph<String, String> g = new Graph<>(new ArrayList<>(Collections.singletonList(new Node<String, String>(null, new ArrayList<>()))));
 		List<Edge<String, String>> actual = fash.proceed(g);
 		assertNotNull(actual);
 		assertTrue("Feedback arc set of an empty graph must be empty", actual.isEmpty());
@@ -40,10 +40,10 @@ public class AlgorithmFashTest {
 		Edge<String, String> e1 = new Edge<>(null, n1, n1, 1);
 		n1.setEdges(Collections.singletonList(e1));
 
-		Graph<String, String> g = new Graph<>(Collections.singletonList(n1));
+		Graph<String, String> g = new Graph<>(new ArrayList<>(Collections.singletonList(n1)));
 		List<Edge<String, String>> actual = fash.proceed(g);
 		assertNotNull(actual);
-		assertTrue("Feedback arc set of an empty graph must be empty", actual.isEmpty());
+		assertEquals("Feedback arc set of an one node one arc loop must contain that arc", 1, actual.size());
 	}
 
 	@Test

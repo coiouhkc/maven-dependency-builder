@@ -14,7 +14,7 @@ import java.util.List;
 public class AlgorithmFash {
 	public <S, T> List<Edge<S, T>> proceed(Graph<S, T> graph) {
 		List<Edge<S, T>> result = new ArrayList<>();
-		Graph<S, T> graph1 = graph; // TODO: do not mutate initial graph
+		Graph<S, T> graph1 = new Graph<>(graph.getNodes());
 		while (!graph1.isEmpty()) {
 			graph1 = graph1.removeAll(graph1.sources());
 			graph1 = graph1.removeAll(graph1.sinks());
