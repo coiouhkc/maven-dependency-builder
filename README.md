@@ -1,8 +1,8 @@
 # maven-dependency-builder
-Tool to generate dependency graphs between Maven projects based of class imports (.java)
+Tool to generate dependency graphs between Maven projects or Java packages based on class imports (.java) and to analyze their cycle-free property (similar to structure101 or stan4j).
 
-The tool produces a dependency graph in `.gml` format, where nodes correspond to Maven projects and edges correspond to `import` dependency of a Java class in one project from another.
-Between two Maven projects there may exist at most one edge, containing all the concat imports in the edge's label.
+The tool produces a dependency graph in `.gml` or `.graphml` format, where nodes correspond to Maven projects or Java packages and edges correspond to `import / import static` dependency of a Java class in one project/package to another.
+Between two Maven projects or Java package there may exist at most one edge, containing all the concat'ed imports in the edge's label (depending on the specified layout options).
 
 # Build
 To create a single assembly (executable jar with all dependencies)
@@ -24,4 +24,14 @@ usage: java -jar <this_lib>
   -t,--dependency-type <arg>   Dependency type (project/package)
 ```
 # Notes
-This tool assumes unique maven project names and unique class names.
+**_Work-In-Progress!_** - this tool is currently under heavy development, please report any bugs or feature requests on Github.
+
+# Known issues
+* missing support for projects stored in not uniquely named directories
+* missing support for import of nested classes/enums/etc.
+
+# Up next
+* `.dot` support
+* classes dependencies
+* distinct edges for violations (color, line type, etc.)
+* maven plugin
