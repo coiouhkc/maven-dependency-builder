@@ -1,6 +1,5 @@
 package org.abratuhi.mavendepbuilder;
 
-import org.abratuhi.mavendepbuilder.gml.GMLLayout;
 import org.abratuhi.mavendepbuilder.model.JavaClass;
 import org.abratuhi.mavendepbuilder.model.Project;
 import org.junit.Test;
@@ -21,36 +20,16 @@ public class MavenDependencyBuilderTest {
 
 	@Test
 	public void testProjectEquals() {
-		Project p1 = new Project(1, "project", new TreeSet<>(), new TreeSet<>());
-		Project p2 = new Project(2, "project", null, null);
+		Project p1 = new Project(1, "project", new TreeSet<>());
+		Project p2 = new Project(2, "project", null);
 		assertEquals(p1, p2);
 	}
 
 	@Test
 	public void testProjectNotEquals() {
-		Project p1 = new Project(1, "project1", null, null);
-		Project p2 = new Project(1, "project2", null, null);
+		Project p1 = new Project(1, "project1", null);
+		Project p2 = new Project(1, "project2", null);
 		assertNotEquals(p1, p2);
-	}
-
-	@Test
-	public void testBuildDependencies0() throws IOException {
-		MavenDependencyBuilder mdb = new MavenDependencyBuilder();
-		Set<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-0"));
-		GMLLayout gml = new GMLLayout();
-		gml.buildDependencies(projects);
-		assertEquals(3, gml.getClassProjectMap().size());
-		assertEquals(0, gml.getNumberOfDependenciesBetweenProjects());
-	}
-
-	@Test
-	public void testBuildDependencies1() throws IOException {
-		MavenDependencyBuilder mdb = new MavenDependencyBuilder();
-		Set<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-1"));
-		GMLLayout gml = new GMLLayout();
-		gml.buildDependencies(projects);
-		assertEquals(3, gml.getClassProjectMap().size());
-		assertEquals(1, gml.getNumberOfDependenciesBetweenProjects());
 	}
 
 	@Test

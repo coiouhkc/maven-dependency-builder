@@ -1,9 +1,11 @@
 package org.abratuhi.mavendepbuilder.graph;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Builder;
 
 import java.util.ArrayList;
@@ -18,8 +20,10 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Node<S, T> {
-	private T object;
+	private S object;
 	private List<Edge<S, T>> edges = new ArrayList<>();
 
 	public List<Edge<S,T>> in() {
@@ -43,10 +47,11 @@ public class Node<S, T> {
 	}
 
 	public void remove (Node<S, T> node) {
-		edges.removeIf(edge -> edge.getFrom().equals(node) || edge.getTo().equals(node));
+		edges.removeIf(edge -> edge.getFrom().equals(node) || edge.getTo().equals(node) || edge.getFrom().getObject().equals(node.getObject()) ||edge.getTo().getObject().equals(node.getObject()));
 	}
 
 	public void removeAll (List<Node<S, T>> nodes) {
 		edges.removeIf(edge -> nodes.contains(edge.getFrom()) || nodes.contains(edge.getTo()));
+//		nodes.forEach(node -> remove(node));
 	}
 }

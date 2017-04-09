@@ -14,9 +14,9 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Alexei Bratuhin
  */
-public class AlgorithmFashTest {
+public class FashTest {
 
-	private AlgorithmFash fash = new AlgorithmFash();
+	private Fash fash = new Fash();
 
 	@Test
 	public void testEmpty() {

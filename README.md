@@ -15,8 +15,13 @@ From the project directory after build:
 ```
 java -jar target\maven-dependency-builder-1.0-SNAPSHOT-jar-with-dependencies.jar
 usage: java -jar <this_lib>
- -i,--inputDirectory <arg>   Input directory to parse for maven projects
- -o,--outputFile <arg>       Output file in gml format
+ -c,--check-for-violation     Whether to check for violations
+  -e,--edge-layout <arg>       Edge layout type (none/weight/text)
+  -f,--format <arg>            Output file format (gml/graphml)
+  -i,--input-directory <arg>   Input directory to parse for maven projects
+  -n,--node-layout <arg>       Node layout type (none/text)
+  -o,--output-file <arg>       Output file
+  -t,--dependency-type <arg>   Dependency type (project/package)
 ```
 # Notes
 This tool assumes unique maven project names and unique class names.
