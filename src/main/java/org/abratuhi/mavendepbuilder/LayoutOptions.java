@@ -1,4 +1,4 @@
-package org.abratuhi.mavendepbuilder.options;
+package org.abratuhi.mavendepbuilder;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

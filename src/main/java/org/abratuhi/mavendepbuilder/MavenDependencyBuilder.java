@@ -10,7 +10,6 @@ import org.abratuhi.mavendepbuilder.layout.graphml.GraphMLLayout;
 import org.abratuhi.mavendepbuilder.model.JavaClass;
 import org.abratuhi.mavendepbuilder.model.JavaPackage;
 import org.abratuhi.mavendepbuilder.model.Project;
-import org.abratuhi.mavendepbuilder.options.LayoutOptions;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;

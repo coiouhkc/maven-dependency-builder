@@ -29,6 +29,8 @@ usage: java -jar <this_lib>
 # Known issues
 * missing support for projects stored in not uniquely named directories
 * missing support for import of nested classes/enums/etc.
+* missing support for package (`.*`) import
+* missing support for reflection
 
 # Up next
 * `.dot` support
