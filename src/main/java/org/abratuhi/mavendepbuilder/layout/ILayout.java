@@ -1,6 +1,6 @@
 package org.abratuhi.mavendepbuilder.layout;
 
-import org.abratuhi.mavendepbuilder.LayoutOptions;
+import org.abratuhi.mavendepbuilder.options.LayoutOptions;
 import org.abratuhi.mavendepbuilder.graph.Graph;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 
