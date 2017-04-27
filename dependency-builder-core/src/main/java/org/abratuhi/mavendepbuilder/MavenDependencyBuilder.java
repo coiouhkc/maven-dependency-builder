@@ -3,6 +3,7 @@ package org.abratuhi.mavendepbuilder;
 import org.abratuhi.mavendepbuilder.graph.Graph;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.graph.Node;
+import org.abratuhi.mavendepbuilder.layout.dot.DotLayout;
 import org.abratuhi.mavendepbuilder.layout.gml.GMLLayout;
 import org.abratuhi.mavendepbuilder.layout.graphml.GraphMLLayout;
 import org.abratuhi.mavendepbuilder.model.JavaClass;
@@ -38,6 +39,7 @@ public class MavenDependencyBuilder {
 		switch (layoutOptions.getFormatLayout()) {
 		case GML: {new GMLLayout().doLayout(dependencyGraph, toFile, layoutOptions); break; }
 		case GRAPHML: {new GraphMLLayout().doLayout(dependencyGraph, toFile, layoutOptions); break; }
+		case DOT: {new DotLayout().doLayout(dependencyGraph, toFile, layoutOptions); break; }
 		default: throw new IllegalArgumentException("Unsupported format: " + layoutOptions.getFormatLayout());
 		}
 	}

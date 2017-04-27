@@ -22,7 +22,6 @@ public class GMLLayout implements ILayout {
 		sb.append("graph [ \n");
 		sb.append("directed 1 \n");
 		graph.getNodes().forEach(node -> {
-			String label = (layoutOptions.getNodeLayout() == LayoutOptions.NodeLayout.TEXT)? node.getObject().getLabel() : "";
 			sb.append("node [ \n");
 			sb.append("id " + node.getObject().getId() + " \n");
 			sb.append("label \"" + LayoutUtil.getNodeLabel(node, layoutOptions.getNodeLayout()) + "\" \n");
