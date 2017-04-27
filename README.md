@@ -23,6 +23,11 @@ usage: java -jar <this_lib>
   -o,--output-file <arg>       Output file
   -t,--dependency-type <arg>   Dependency type (project/package)
 ```
+
+As Maven Plugin from command line:
+```
+mvn org.abratuhi:dependency-builder-maven-plugin:1.0-SNAPSHOT:mavendepbuilder -Dmavendepbuilder.inputDir=. -Dmavendepbuilder.outputFile=./current-default-dependencies.gml
+```
 # Notes
 **_Work-In-Progress!_** - this tool is currently under heavy development, please report any bugs or feature requests on Github.
 
@@ -36,4 +41,3 @@ usage: java -jar <this_lib>
 * `.dot` support
 * classes dependencies
 * distinct edges for violations (color, line type, etc.)
-* maven plugin

@@ -1,8 +1,11 @@
-*.iml
+**/*.iml
 .idea/*
-target/*
+**/target/*
 *.class
 *.jar
 *.war
 *.ear
 hs_err_pid*
+
+*.gml
+*.graphml
