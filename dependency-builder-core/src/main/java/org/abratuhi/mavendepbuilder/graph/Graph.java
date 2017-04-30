@@ -46,13 +46,16 @@ public class Graph<S, T> {
 	}
 
 	public Node<S, T> getByNodeObject(S object) {
+		//return nodes.stream().filter(node -> (node.getObject()==null && object == null) || node.getObject().equals(object)).findFirst().orElse(null);
 		return nodes.stream().filter(node -> node.getObject().equals(object)).findFirst().orElse(null);
 	}
 
 	public Edge<S, T> addEdge(T edgeObject, Node<S, T> from, Node<S, T> to, int weight) {
 		Edge<S, T> edge = new Edge<>(edgeObject, from, to, weight);
 		from.getEdges().add(edge);
-		to.getEdges().add(edge);
+		if (!from.equals(to)) {
+			to.getEdges().add(edge);
+		}
 		return edge;
 	}
 

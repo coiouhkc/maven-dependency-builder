@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "object")
 public class Node<S, T> {
 	private S object;
 	private List<Edge<S, T>> edges = new ArrayList<>();
