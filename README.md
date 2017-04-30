@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/coiouhkc/maven-dependency-builder.svg)](https://travis-ci.org/coiouhkc/maven-dependency-builder)
+
 # maven-dependency-builder
 Tool to generate dependency graphs between Maven projects or Java packages based on class imports (.java) and to analyze their cycle-free property (similar to structure101 or stan4j).
 
