@@ -11,10 +11,10 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.junit.runners.Parameterized;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -62,12 +62,12 @@ public class MavenDependencyBuilderMojo extends AbstractMojo {
 
 			Graph dependencyGraph = mdb.buildDependencyGraph(projects, dependencyType);
 
+			List<Edge> violations = new ArrayList<>();
 			if (checkForViolations) {
-				List<Edge> violations = new Fash().proceed(dependencyGraph);
-				violations.forEach(violation -> getLog().warn(violation.toString()));
+				violations = new Fash().proceed(dependencyGraph);
 			}
 
-			mdb.layout(dependencyGraph, new File(outputFile),
+			mdb.layout(dependencyGraph, violations, new File(outputFile),
 					new LayoutOptions(formatLayoutType, nodeLayoutType, edgeLayoutType));
 		} catch (IOException e){
 			throw new MojoExecutionException("Dependency generation failed", e);

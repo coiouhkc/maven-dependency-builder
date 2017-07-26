@@ -36,7 +36,8 @@ public class LayoutOptions {
 	public enum FormatLayout {
 		GML,
 		GRAPHML,
-		DOT;
+		DOT,
+		CSV;
 
 		public static FormatLayout fromString(String str){
 			return FormatLayout.valueOf(str.toUpperCase());

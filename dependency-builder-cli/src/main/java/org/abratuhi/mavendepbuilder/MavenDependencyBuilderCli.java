@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class MavenDependencyBuilderCli {
 		Options options = new Options();
 		options.addOption("i", "input-directory", true, "Input directory to parse for maven projects");
 		options.addOption("o", "output-file", true, "Output file");
-		options.addOption("f", "format", true, "Output file format (gml/graphml)");
+		options.addOption("f", "format", true, "Output file format (gml/graphml/dot/csv)");
 		options.addOption("t", "dependency-type", true, "Dependency type (project/package)");
 		options.addOption("c", "check-for-violation", false, "Whether to check for violations");
 		options.addOption("n", "node-layout", true, "Node layout type (none/text)");
@@ -78,12 +79,12 @@ public class MavenDependencyBuilderCli {
 		Set<Project> projects = mdb.visit(new File(in));
 
 		Graph dependencyGraph = mdb.buildDependencyGraph(projects, dependencyType);
-
+		
+		List<Edge> violations = new ArrayList<>();
 		if (checkForViolations) {
-			List<Edge> violations = new Fash().proceed(dependencyGraph);
-			violations.forEach(violation -> LOGGER.warn(violation.toString()));
+			violations = new Fash().proceed(dependencyGraph);
 		}
 
-		mdb.layout(dependencyGraph, new File(out), new LayoutOptions(formatLayoutType, nodeLayoutType, edgeLayoutType));
+		mdb.layout(dependencyGraph, violations, new File(out), new LayoutOptions(formatLayoutType, nodeLayoutType, edgeLayoutType));
 	}
 }
