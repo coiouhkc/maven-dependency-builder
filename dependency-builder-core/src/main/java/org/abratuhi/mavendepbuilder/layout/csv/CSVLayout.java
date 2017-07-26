@@ -19,13 +19,20 @@ public class CSVLayout implements ILayout {
 	@Override
 	public <S extends Graphable, T> void doLayout(Graph<S, T> graph, List<Edge> violations, File toFile, LayoutOptions layoutOptions) throws IOException {
 		CSVWriter csvWriter = new CSVWriter(new FileWriter(toFile), ',');
-		violations.forEach(violation ->
-												 csvWriter.writeNext(
-													 new String[]{
-														 violation.getFrom().getObject().toString(),
-														 violation.getTo().getObject().toString(),
-														 violation.getWeight().toString(),
-														 violation.getObject().toString()}));
+		csvWriter.writeNext(new String[]{
+			"From",
+			"To",
+			"# of Violations",
+			"Violation imports (comma-separated)"
+		});
+		violations.forEach(
+			violation ->
+				csvWriter.writeNext(
+					new String[]{
+						violation.getFrom().getObject().toString(),
+						violation.getTo().getObject().toString(),
+						violation.getWeight().toString(),
+						violation.getObject().toString()}));
 		csvWriter.flush();
 		csvWriter.close();
 	}
