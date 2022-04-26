@@ -3,6 +3,7 @@ package org.abratuhi.mavendepbuilder;
 import org.abratuhi.mavendepbuilder.graph.Edge;
 import org.abratuhi.mavendepbuilder.graph.Fash;
 import org.abratuhi.mavendepbuilder.graph.Graph;
+import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.model.Project;
 import org.abratuhi.mavendepbuilder.options.LayoutOptions;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +12,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,12 +62,12 @@ public class MavenDependencyBuilderMojo extends AbstractMojo {
 
 			Set<Project> projects = mdb.visit(new File(inputDir));
 
-			Graph dependencyGraph = mdb.buildDependencyGraph(projects, dependencyType);
+			DefaultDirectedGraph<? extends Graphable, DefaultEdge> dependencyGraph = mdb.buildDependencyGraph(projects, dependencyType);
 
-			if (checkForViolations) {
-				List<Edge> violations = new Fash().proceed(dependencyGraph);
-				violations.forEach(violation -> getLog().warn(violation.toString()));
-			}
+//			if (checkForViolations) {
+//				List<Edge> violations = new Fash().proceed(dependencyGraph);
+//				violations.forEach(violation -> getLog().warn(violation.toString()));
+//			}
 
 			mdb.layout(dependencyGraph, new File(outputFile),
 					new LayoutOptions(formatLayoutType, nodeLayoutType, edgeLayoutType));

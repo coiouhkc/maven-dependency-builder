@@ -1,11 +1,14 @@
 package org.abratuhi.mavendepbuilder.layout.graphml;
 
+import org.abratuhi.mavendepbuilder.model.Project;
 import org.abratuhi.mavendepbuilder.options.LayoutOptions;
 import org.abratuhi.mavendepbuilder.graph.Graph;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.layout.ILayout;
 import org.abratuhi.mavendepbuilder.layout.LayoutUtil;
 import org.apache.commons.io.FileUtils;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +18,7 @@ import java.io.IOException;
  */
 public class GraphMLLayout implements ILayout{
 
-	public <S extends Graphable, T> void doLayout(Graph<S, T> graph, File toFile, LayoutOptions layoutOptions) throws IOException {
+	public <S extends Graphable, T> void doLayout(DefaultDirectedGraph<S, DefaultEdge> graph, File toFile, LayoutOptions layoutOptions) throws IOException {
 		// build directed graph in graphml notation with yEd flavour
 		StringBuffer sb = new StringBuffer();
 		sb.append(""
@@ -26,26 +29,27 @@ public class GraphMLLayout implements ILayout{
 				+ "  <key for=\"node\" id=\"d0\" yfiles.type=\"nodegraphics\"/>"
 				+ "  <key for=\"edge\" id=\"d10\" yfiles.type=\"edgegraphics\"/>"
 				+ "  <graph id=\"G\" edgedefault=\"directed\">\n" );
-		graph.getNodes().stream().forEach(node -> {
-			sb.append("<node id=\"" + node.getObject().getId() + "\">\n");
+		graph.vertexSet().stream().forEach(node -> {
+			sb.append("<node id=\"" + node.getLabel() + "\">\n");
 			sb.append(""
 					+ "<data key=\"d0\">\n"
 					+ "        <y:ShapeNode>\n"
-					+ "          <y:NodeLabel>\"" + LayoutUtil.getNodeLabel(node, layoutOptions.getNodeLayout()) + "\"</y:NodeLabel>\n"
+					+ "          <y:Fill color=\"" + node.getColor() + "\" transparent=\"false\"/>\n"
+					+ "          <y:NodeLabel>\"" + LayoutUtil.getNodeLabel(node.getLabel(), layoutOptions.getNodeLayout()) + "\"</y:NodeLabel>\n"
 					+ "        </y:ShapeNode>\n"
 					+ "      </data>\n");
 			sb.append("</node>\n");
 		});
 
 
-		graph.edges().forEach(edge -> {
-			sb.append("<edge id=\"" + edge.getFrom().getObject().getId() + "_" + edge.getTo().getObject().getId() + "\" source=\"" + edge.getFrom().getObject().getId() + "\" target=\"" + edge.getTo().getObject().getId() + "\">\n");
+		graph.edgeSet().forEach(edge -> {
+			sb.append("<edge id=\"" + graph.getEdgeSource(edge).getLabel() + "_" + graph.getEdgeTarget(edge).getLabel() + "\" source=\"" + graph.getEdgeSource(edge).getLabel() + "\" target=\"" + graph.getEdgeTarget(edge).getLabel() + "\">\n");
 			sb.append("<data key=\"d10\">\n"
 					+ "        <y:PolyLineEdge>\n"
 					+ "          <y:Path sx=\"0.0\" sy=\"0.0\" tx=\"0.0\" ty=\"0.0\"/>\n"
 					+ "          <y:LineStyle color=\"#000000\" type=\"line\" width=\"1.0\"/>\n"
 					+ "          <y:Arrows source=\"none\" target=\"standard\"/>\n"
-					+ "          <y:EdgeLabel>" + LayoutUtil.getEdgeLabel(edge, layoutOptions.getEdgeLayout()) + "</y:EdgeLabel>\n"
+					+ "          <y:EdgeLabel>" + LayoutUtil.getEdgeLabel("", layoutOptions.getEdgeLayout()) + "</y:EdgeLabel>\n"
 					+ "          <y:BendStyle smoothed=\"false\"/>\n"
 					+ "        </y:PolyLineEdge>\n" + "      </data>");
 			sb.append("</edge>");

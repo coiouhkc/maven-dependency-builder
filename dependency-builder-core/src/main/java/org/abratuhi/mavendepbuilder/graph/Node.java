@@ -1,30 +1,24 @@
 package org.abratuhi.mavendepbuilder.graph;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.Builder;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+
 /**
  * @author Alexei Bratuhin
  */
-@Getter
-@Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Builder
+@Data
 @EqualsAndHashCode(of = "object")
 public class Node<S, T> {
 	private S object;
-	private List<Edge<S, T>> edges = new ArrayList<>();
+	@Builder.Default private List<Edge<S, T>> edges = new ArrayList<>();
 
 	public List<Edge<S,T>> in() {
 		return getEdges().stream().filter(edge -> edge.getTo().equals(this)).collect(Collectors.toList());

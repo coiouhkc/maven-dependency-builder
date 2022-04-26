@@ -8,4 +8,8 @@ public interface Graphable {
 	Integer getId();
 
 	String getLabel();
+
+	default String getColor() {
+		return "#ccccff";
+	}
 }

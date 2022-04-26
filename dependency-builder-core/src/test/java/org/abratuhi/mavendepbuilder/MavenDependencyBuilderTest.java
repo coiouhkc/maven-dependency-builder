@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,15 +21,15 @@ public class MavenDependencyBuilderTest {
 
 	@Test
 	public void testProjectEquals() {
-		Project p1 = new Project(1, "project", new TreeSet<>());
-		Project p2 = new Project(2, "project", null);
+		Project p1 = new Project(1, "project", new HashMap<>(), new TreeSet<>(), true, false);
+		Project p2 = new Project(2, "project", new HashMap<>(), null, false, false);
 		assertEquals(p1, p2);
 	}
 
 	@Test
 	public void testProjectNotEquals() {
-		Project p1 = new Project(1, "project1", null);
-		Project p2 = new Project(1, "project2", null);
+		Project p1 = new Project(1, "project1", new HashMap<>(), null, false, false);
+		Project p2 = new Project(1, "project2", new HashMap<>(), null, false, false);
 		assertNotEquals(p1, p2);
 	}
 
