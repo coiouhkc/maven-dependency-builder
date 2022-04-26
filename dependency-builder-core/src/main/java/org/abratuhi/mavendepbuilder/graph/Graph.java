@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Builder;
+import lombok.Builder;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
