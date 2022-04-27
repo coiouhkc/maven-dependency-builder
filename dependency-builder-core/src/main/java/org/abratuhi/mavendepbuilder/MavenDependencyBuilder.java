@@ -208,7 +208,7 @@ public class MavenDependencyBuilder {
 								.map(dependency -> Project.builder()
 										.name(getDependencyGroupId(dependency, model) + ":" + getDependencyArtifactId(dependency))
 										.build())
-								.collect(Collectors.toMap(Project::getName, Function.identity()))
+								.collect(Collectors.toMap(Project::getName, Function.identity(), (p1, p2) -> p1))
 				);
 			}
 		}
