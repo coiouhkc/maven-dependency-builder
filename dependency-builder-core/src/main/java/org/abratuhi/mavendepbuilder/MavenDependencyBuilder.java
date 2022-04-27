@@ -108,22 +108,22 @@ public class MavenDependencyBuilder {
 				.forEach(project -> {
 					String groupId = project.getName().split(":")[0];
 					String artifactId = project.getName().split(":")[1];
-					HttpRequest request = HttpRequest.newBuilder(
-							URI.create(
-									"https://repo.maven.apache.org/maven2/" +
-											groupId.replaceAll("\\.", "/") +
-											"/" +
-											artifactId +
-											"/maven-metadata.xml"))
-							.GET()
-							.build();
 					try {
+						HttpRequest request = HttpRequest.newBuilder(
+										URI.create(
+												"https://repo.maven.apache.org/maven2/" +
+														groupId.replaceAll("\\.", "/") +
+														"/" +
+														artifactId +
+														"/maven-metadata.xml"))
+								.GET()
+								.build();
 						// FIXME: use async version
 						HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 						LOGGER.info("Resolved " + project.getName() + " as " + response.statusCode() + ", uri = " + request.uri());
 						project.setResolvable(response.statusCode() == 200);
-					} catch (IOException|InterruptedException e) {
-						throw new RuntimeException(e);
+					} catch (Throwable t) {
+						LOGGER.error("Failed " + project.getName());
 					}
 				});
 
