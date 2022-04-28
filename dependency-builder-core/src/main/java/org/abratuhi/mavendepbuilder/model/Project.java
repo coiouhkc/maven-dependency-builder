@@ -21,8 +21,8 @@ public class Project implements Graphable {
   @Builder.Default
   private String name = "";
 
-	@Builder.Default
-	private Map<String, Project> dependencies = new HashMap<>();
+  @Builder.Default
+  private Map<String, Project> dependencies = new HashMap<>();
 
   @Builder.Default
   private Set<JavaPackage> packages = new HashSet<>();
