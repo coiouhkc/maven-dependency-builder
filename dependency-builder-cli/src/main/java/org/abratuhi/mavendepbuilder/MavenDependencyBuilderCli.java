@@ -11,6 +11,7 @@ import org.jgrapht.graph.DefaultEdge;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class MavenDependencyBuilderCli {
     Options options = new Options();
     options.addOption("i", "input-directory", true, "Input directory to parse for maven projects");
     options.addOption("o", "output-file", true, "Output file");
-    options.addOption("f", "format", true, "Output file format (gml/graphml)");
+		options.addOption("f", "format", true, "Output file format (gml/graphml/dot/csv)");
     options.addOption("t", "dependency-type", true, "Dependency type (project/package)");
     options.addOption("c", "check-for-violation", false, "Whether to check for violations");
     options.addOption("n", "node-layout", true, "Node layout type (none/text)");

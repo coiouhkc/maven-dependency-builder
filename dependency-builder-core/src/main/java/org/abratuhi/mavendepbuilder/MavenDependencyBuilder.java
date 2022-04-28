@@ -9,6 +9,7 @@ import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.graph.Node;
 import org.abratuhi.mavendepbuilder.jaxb.Dependency;
 import org.abratuhi.mavendepbuilder.jaxb.Model;
+import org.abratuhi.mavendepbuilder.layout.csv.CSVLayout;
 import org.abratuhi.mavendepbuilder.layout.dot.DotLayout;
 import org.abratuhi.mavendepbuilder.layout.gml.GMLLayout;
 import org.abratuhi.mavendepbuilder.layout.graphml.GraphMLLayout;
@@ -62,6 +63,10 @@ public class MavenDependencyBuilder {
       case DOT: {
         new DotLayout().doLayout(dependencyGraph, toFile, layoutOptions);
         break;
+      }
+
+      case CSV: {
+        new CSVLayout().doLayout(dependencyGraph, toFile, layoutOptions);
       }
       default:
         throw new IllegalArgumentException("Unsupported format: " + layoutOptions.getFormatLayout());

@@ -1,8 +1,5 @@
 package org.abratuhi.mavendepbuilder;
 
-import org.abratuhi.mavendepbuilder.graph.Edge;
-import org.abratuhi.mavendepbuilder.graph.Fash;
-import org.abratuhi.mavendepbuilder.graph.Graph;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.model.Project;
 import org.abratuhi.mavendepbuilder.options.LayoutOptions;
@@ -18,10 +15,8 @@ import org.jgrapht.graph.DefaultEdge;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Alexei Bratuhin
@@ -71,8 +66,7 @@ public class MavenDependencyBuilderMojo extends AbstractMojo {
 
       DefaultDirectedGraph<? extends Graphable, DefaultEdge> dependencyGraph = mdb.buildDependencyGraph(projects, dependencyType);
 
-
-      mdb.layout(dependencyGraph, new File(outputFile),
+			mdb.layout(dependencyGraph, new File(outputFile),
           new LayoutOptions(formatLayoutType, nodeLayoutType, edgeLayoutType));
 
 
