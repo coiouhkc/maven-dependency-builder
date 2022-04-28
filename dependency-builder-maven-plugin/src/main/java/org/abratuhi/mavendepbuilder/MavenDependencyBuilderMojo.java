@@ -15,6 +15,7 @@ import org.jgrapht.graph.DefaultEdge;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -66,15 +67,20 @@ public class MavenDependencyBuilderMojo extends AbstractMojo {
 
       DefaultDirectedGraph<? extends Graphable, DefaultEdge> dependencyGraph = mdb.buildDependencyGraph(projects, dependencyType);
 
-			mdb.layout(dependencyGraph, new File(outputFile),
-          new LayoutOptions(formatLayoutType, nodeLayoutType, edgeLayoutType));
-
-
-      // FIXME: potentially destructive function, call last
+      // FIXME: potentially destructive function
 //			if (checkForViolations) {
 //				List<Edge> violations = new Fash().proceed(dependencyGraph);
 //				violations.forEach(violation -> getLog().warn(violation.toString()));
 //			}
+
+			mdb.layout(
+          dependencyGraph,
+          Collections.emptyList(),
+          new File(outputFile),
+          new LayoutOptions(formatLayoutType, nodeLayoutType, edgeLayoutType)
+      );
+
+
     } catch (IOException e) {
       throw new MojoExecutionException("Dependency generation failed", e);
     }

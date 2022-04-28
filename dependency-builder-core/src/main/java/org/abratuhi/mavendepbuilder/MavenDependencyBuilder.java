@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.abratuhi.mavendepbuilder.graph.Edge;
 import org.abratuhi.mavendepbuilder.graph.Graph;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.graph.Node;
@@ -50,23 +51,27 @@ public class MavenDependencyBuilder {
 
   private static final Logger LOGGER = Logger.getLogger(MavenDependencyBuilder.class);
 
-  public <S extends Graphable, T> void layout(DefaultDirectedGraph<S, DefaultEdge> dependencyGraph, File toFile, LayoutOptions layoutOptions) throws IOException {
+  public <S extends Graphable, T> void layout(
+      DefaultDirectedGraph<S, DefaultEdge> dependencyGraph,
+      List<Edge> violations,
+      File toFile,
+      LayoutOptions layoutOptions
+  ) throws IOException {
     switch (layoutOptions.getFormatLayout()) {
       case GML: {
-        new GMLLayout().doLayout(dependencyGraph, toFile, layoutOptions);
+        new GMLLayout().doLayout(dependencyGraph, violations, toFile, layoutOptions);
         break;
       }
       case GRAPHML: {
-        new GraphMLLayout().doLayout(dependencyGraph, toFile, layoutOptions);
+        new GraphMLLayout().doLayout(dependencyGraph, violations, toFile, layoutOptions);
         break;
       }
       case DOT: {
-        new DotLayout().doLayout(dependencyGraph, toFile, layoutOptions);
+        new DotLayout().doLayout(dependencyGraph, violations, toFile, layoutOptions);
         break;
       }
-
       case CSV: {
-        new CSVLayout().doLayout(dependencyGraph, toFile, layoutOptions);
+        new CSVLayout().doLayout(dependencyGraph, violations, toFile, layoutOptions);
       }
       default:
         throw new IllegalArgumentException("Unsupported format: " + layoutOptions.getFormatLayout());

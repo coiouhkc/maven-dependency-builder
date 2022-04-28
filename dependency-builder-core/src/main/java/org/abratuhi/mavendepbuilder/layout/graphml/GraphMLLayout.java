@@ -1,5 +1,6 @@
 package org.abratuhi.mavendepbuilder.layout.graphml;
 
+import org.abratuhi.mavendepbuilder.graph.Edge;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.layout.ILayout;
 import org.abratuhi.mavendepbuilder.layout.LayoutUtil;
@@ -10,13 +11,14 @@ import org.jgrapht.graph.DefaultEdge;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Alexei Bratuhin
  */
 public class GraphMLLayout implements ILayout {
 
-  public <S extends Graphable, T> void doLayout(DefaultDirectedGraph<S, DefaultEdge> graph, File toFile, LayoutOptions layoutOptions) throws IOException {
+  public <S extends Graphable, T> void doLayout(DefaultDirectedGraph<S, DefaultEdge> graph, List<Edge> violations, File toFile, LayoutOptions layoutOptions) throws IOException {
     // build directed graph in graphml notation with yEd flavour
     StringBuffer sb = new StringBuffer();
     sb.append(""

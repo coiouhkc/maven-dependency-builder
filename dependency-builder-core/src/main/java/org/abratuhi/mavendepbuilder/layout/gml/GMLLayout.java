@@ -1,5 +1,6 @@
 package org.abratuhi.mavendepbuilder.layout.gml;
 
+import org.abratuhi.mavendepbuilder.graph.Edge;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.layout.ILayout;
 import org.abratuhi.mavendepbuilder.layout.LayoutUtil;
@@ -10,6 +11,7 @@ import org.jgrapht.graph.DefaultEdge;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Alexei Bratuhin
@@ -17,7 +19,7 @@ import java.io.IOException;
  */
 public class GMLLayout implements ILayout {
 
-  public <S extends Graphable, T> void doLayout(DefaultDirectedGraph<S, DefaultEdge> graph, File toFile, LayoutOptions layoutOptions) throws IOException {
+  public <S extends Graphable, T> void doLayout(DefaultDirectedGraph<S, DefaultEdge> graph, List<Edge> violations, File toFile, LayoutOptions layoutOptions) throws IOException {
     // build directed graph in gml notation (using wikipedia example as reference)
     StringBuilder sb = new StringBuilder();
     sb.append("graph [ \n");

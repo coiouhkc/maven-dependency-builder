@@ -11,10 +11,7 @@ import org.jgrapht.graph.DefaultEdge;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -82,13 +79,18 @@ public class MavenDependencyBuilderCli {
 
     DefaultDirectedGraph<? extends Graphable, DefaultEdge> dependencyGraph = mdb.buildDependencyGraph(projects, dependencyType);
 
-
-    mdb.layout(dependencyGraph, new File(out), new LayoutOptions(formatLayoutType, nodeLayoutType, edgeLayoutType));
-
-    // FIXME: potentially destructive function, call last
+    // FIXME: potentially destructive function
 //		if (checkForViolations) {
 //			List<Edge<Graphable, Object>> violations = new Fash().proceed(dependencyGraph);
 //			violations.forEach(violation -> LOGGER.warn(violation.toString()));
 //		}
+
+    mdb.layout(
+        dependencyGraph,
+        Collections.emptyList(),
+        new File(out),
+        new LayoutOptions(formatLayoutType, nodeLayoutType, edgeLayoutType)
+    );
+
   }
 }
