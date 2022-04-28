@@ -14,8 +14,11 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Alexei Bratuhin
@@ -43,6 +46,9 @@ public class MavenDependencyBuilderMojo extends AbstractMojo {
 	@Parameter(property = "mavendepbuilder.edgeLayoutType", defaultValue = "WEIGHT")
 	private LayoutOptions.EdgeLayout edgeLayoutType;
 
+	@Parameter(property = "mavendepbuilder.exclude", defaultValue = "")
+	private String excludePatterns;
+
 
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -55,7 +61,9 @@ public class MavenDependencyBuilderMojo extends AbstractMojo {
 		}
 
 		try {
-			MavenDependencyBuilder mdb = new MavenDependencyBuilder();
+			MavenDependencyBuilder mdb = new MavenDependencyBuilder(
+					Arrays.stream(excludePatterns.split(",")).collect(Collectors.toSet())
+			);
 
 			Set<Project> projects = mdb.visit(new File(inputDir));
 

@@ -1,5 +1,9 @@
 package org.abratuhi.mavendepbuilder;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.abratuhi.mavendepbuilder.graph.Graph;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.graph.Node;
@@ -31,7 +35,13 @@ import java.util.stream.Collectors;
 /**
  * @author Alexei Bratuhin
  */
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
+@Data
 public class MavenDependencyBuilder {
+
+	private Set<String> excludePatterns = new HashSet<>();
 
 	private static final Logger LOGGER = Logger.getLogger(MavenDependencyBuilder.class);
 
@@ -158,6 +168,10 @@ public class MavenDependencyBuilder {
 	/* default */ Set<Project> visitDirectory(File dir) throws IOException {
 		final Set<Project> result = new HashSet<>();
 		if (!dir.isDirectory()) {
+			return result;
+		}
+
+		if (excludePatterns.stream().anyMatch(pattern -> dir.getName().matches(pattern))) {
 			return result;
 		}
 
