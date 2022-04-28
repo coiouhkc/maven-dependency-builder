@@ -10,9 +10,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * @author Alexei Bratuhin
@@ -48,5 +46,13 @@ public class MavenDependencyBuilderTest {
 		assertEquals("org.abratuhi.payara.issue959.PayaraIssue959Impl", javaClass.getName());
 		assertEquals("org.abratuhi.payara.issue959", javaClass.getPakkage());
 		assertEquals(4, javaClass.getImports().size());
+	}
+
+	@Test
+	public void testVisitExcludedDirectory() throws IOException {
+		MavenDependencyBuilder mdb = new MavenDependencyBuilder(Set.of("payara-issue-959-deps-0"));
+		Set<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-0"));
+		assertNotNull(projects);
+		assertTrue(projects.isEmpty());
 	}
 }

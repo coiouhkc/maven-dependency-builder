@@ -11,7 +11,10 @@ import org.jgrapht.graph.DefaultEdge;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Alexei Bratuhin
@@ -29,6 +32,7 @@ public class MavenDependencyBuilderCli {
     options.addOption("c", "check-for-violation", false, "Whether to check for violations");
     options.addOption("n", "node-layout", true, "Node layout type (none/text)");
     options.addOption("e", "edge-layout", true, "Edge layout type (none/weight/text)");
+		options.addOption(null, "exclude", true, "Directories to exclude from parsing, comma-separated pattern-based, e.g. node_modules,target,out*");
 
     CommandLineParser parser = new PosixParser();
     CommandLine cmd = parser.parse(options, args);
@@ -40,6 +44,7 @@ public class MavenDependencyBuilderCli {
     LayoutOptions.NodeLayout nodeLayoutType = LayoutOptions.NodeLayout.TEXT;
     LayoutOptions.EdgeLayout edgeLayoutType = LayoutOptions.EdgeLayout.WEIGHT;
     boolean checkForViolations = false;
+		Set<String> excludePatterns = new HashSet<>();
     if (cmd.hasOption("i")) {
       in = cmd.getOptionValue("i");
     }
@@ -61,13 +66,16 @@ public class MavenDependencyBuilderCli {
     if (cmd.hasOption("e")) {
       edgeLayoutType = LayoutOptions.EdgeLayout.fromString(cmd.getOptionValue("e"));
     }
+		if (cmd.hasOption("exclude")) {
+			excludePatterns = Arrays.stream(cmd.getOptionValue("exclude").split(",")).collect(Collectors.toSet());
+		}
 
     if (StringUtils.isEmpty(in) || StringUtils.isEmpty(out)) {
       new HelpFormatter().printHelp("java -jar <this_lib>", options);
       return;
     }
 
-    MavenDependencyBuilder mdb = new MavenDependencyBuilder();
+		MavenDependencyBuilder mdb = new MavenDependencyBuilder(excludePatterns);
 
     Set<Project> projects = mdb.visit(new File(in));
 
