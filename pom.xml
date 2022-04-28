@@ -21,6 +21,8 @@
 		<maven-plugin-annotations.version>3.4</maven-plugin-annotations.version>
 		<maven-plugin-api.version>3.0</maven-plugin-api.version>
 		<maven-plugin-plugin.version>3.6.0</maven-plugin-plugin.version>
+		<maven-compiler-plugin.source>11</maven-compiler-plugin.source>
+		<maven-compiler-plugin.target>11</maven-compiler-plugin.target>
 	</properties>
 
 	<modules>
@@ -30,16 +32,20 @@
 	</modules>
 
 	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.0</version>
+					<configuration>
+						<source>${maven-compiler-plugin.source}</source>
+						<target>${maven-compiler-plugin.target}</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 	</build>
 
 </project>
