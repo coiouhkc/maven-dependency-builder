@@ -18,7 +18,7 @@ import java.util.List;
 public class CSVLayout implements ILayout {
 	@Override
 	public <S extends Graphable, T> void doLayout(Graph<S, T> graph, List<Edge> violations, File toFile, LayoutOptions layoutOptions) throws IOException {
-		CSVWriter csvWriter = new CSVWriter(new FileWriter(toFile), ',');
+		CSVWriter csvWriter = new CSVWriter(new FileWriter(toFile));
 		csvWriter.writeNext(new String[]{
 			"From",
 			"To",
