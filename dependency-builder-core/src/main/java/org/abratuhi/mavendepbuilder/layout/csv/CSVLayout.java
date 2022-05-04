@@ -2,7 +2,6 @@ package org.abratuhi.mavendepbuilder.layout.csv;
 
 import com.opencsv.CSVWriter;
 import org.abratuhi.mavendepbuilder.graph.Edge;
-import org.abratuhi.mavendepbuilder.graph.Graph;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.layout.ILayout;
 import org.abratuhi.mavendepbuilder.options.LayoutOptions;
@@ -25,7 +24,7 @@ public class CSVLayout implements ILayout {
 			File toFile,
 			LayoutOptions layoutOptions
 	) throws IOException {
-		CSVWriter csvWriter = new CSVWriter(new FileWriter(toFile), ',');
+		CSVWriter csvWriter = new CSVWriter(new FileWriter(toFile));
 		csvWriter.writeNext(new String[]{
 			"From",
 			"To",
