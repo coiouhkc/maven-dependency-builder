@@ -55,4 +55,14 @@ public class MavenDependencyBuilderTest {
 		assertNotNull(projects);
 		assertTrue(projects.isEmpty());
 	}
+
+	@Test
+	public void testVisitParentInDependencies() throws IOException {
+		MavenDependencyBuilder mdb = new MavenDependencyBuilder();
+		Set<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-1"));
+		assertNotNull(projects);
+		Project projectApi = projects.stream().filter(project -> project.getName().contains("api")).findFirst().orElse(null);
+		assertNotNull(projectApi);
+		assertTrue(projectApi.getDependencies().containsKey("org.abratuhi:payara-issue-959"));
+	}
 }

@@ -236,6 +236,13 @@ public class MavenDependencyBuilder {
                 .collect(Collectors.toMap(Project::getName, Function.identity(), (p1, p2) -> p1))
         );
       }
+
+      if (model.getParent() != null) {
+        Project parentProject = Project.builder()
+            .name(model.getParent().getGroupId() + ":" + model.getParent().getArtifactId())
+            .build();
+        project.getDependencies().putIfAbsent(parentProject.getName(), parentProject);
+      }
     }
 
     if (new File(dir, "src").exists()) {
