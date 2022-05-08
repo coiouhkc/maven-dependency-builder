@@ -2,7 +2,7 @@ package org.abratuhi.mavendepbuilder;
 
 import org.abratuhi.mavendepbuilder.model.JavaClass;
 import org.abratuhi.mavendepbuilder.model.Project;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Alexei Bratuhin
@@ -32,14 +32,14 @@ public class MavenDependencyBuilderTest {
 	}
 
 	@Test
-	public void testVisitDirectory() throws IOException {
+	void testVisitDirectory() throws IOException {
 		MavenDependencyBuilder mdb = new MavenDependencyBuilder();
 		Set<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-0"));
 		assertEquals(4, projects.size());
 	}
 
 	@Test
-	public void testVisitJavaClass() throws IOException {
+	void testVisitJavaClass() throws IOException {
 		MavenDependencyBuilder mdb = new MavenDependencyBuilder();
 		JavaClass javaClass = mdb.visitJavaClass(new File("src/test/resources/payara-issue-959-deps-0/payara-issue-959-ejb/src/main/java/org/abratuhi/payara/issue959/PayaraIssue959Impl.java"));
 		assertNotNull(javaClass);
@@ -49,7 +49,7 @@ public class MavenDependencyBuilderTest {
 	}
 
 	@Test
-	public void testVisitExcludedDirectory() throws IOException {
+	void testVisitExcludedDirectory() throws IOException {
 		MavenDependencyBuilder mdb = new MavenDependencyBuilder(Set.of("payara-issue-959-deps-0"));
 		Set<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-0"));
 		assertNotNull(projects);
