@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Alexei Bratuhin
@@ -25,7 +25,7 @@ public class DependencyTestUtil {
 		if (violations.size() > 0) {
 			String allEdges = edgesToString(graph.edges());
 			String allViolations = edgesToString(violations);
-			assertEquals("All:\n" + allEdges + "\n" + "Violations:\n" + allViolations + "\n", expectedViolations, violations.size());
+			assertEquals(expectedViolations, violations.size(), "All:\n" + allEdges + "\n" + "Violations:\n" + allViolations + "\n");
 		}
 	}
 
