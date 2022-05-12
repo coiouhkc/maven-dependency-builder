@@ -1,15 +1,13 @@
 package org.abratuhi.mavendepbuilder.graph;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder(toBuilder = true)
-@Data
+// TODO: investigate why adding Lombok @Data annotation seems to ruin smth. within equals/hashCode in deep depth of BaseIntrusiveEdgesSpecifics
 public class DependencyEdge extends DefaultWeightedEdge {
-  private String label;
+  @Getter @Setter private String label;
+
+  public double getWeight() {
+    return super.getWeight();
+  }
 }
