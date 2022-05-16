@@ -15,12 +15,20 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JavaClass implements Graphable {
-	@Getter @Setter private Integer id = -1;
-	@Getter @Setter private String name;
-	@Getter @Setter private String pakkage;
-	@Getter @Setter private List<String> imports = new ArrayList<>();
+  @Getter
+  @Setter
+  private Integer id = -1;
+  @Getter
+  @Setter
+  private String name;
+  @Getter
+  @Setter
+  private String pakkage;
+  @Getter
+  @Setter
+  private List<String> imports = new ArrayList<>();
 
-	public String getLabel() {
-		return getName();
-	}
+  public String getLabel() {
+    return getName();
+  }
 }

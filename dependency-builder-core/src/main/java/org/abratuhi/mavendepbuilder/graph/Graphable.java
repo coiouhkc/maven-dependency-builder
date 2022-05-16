@@ -5,7 +5,11 @@ package org.abratuhi.mavendepbuilder.graph;
  */
 public interface Graphable {
 
-	Integer getId();
+  Integer getId();
 
-	String getLabel();
+  String getLabel();
+
+  default String getColor() {
+    return "#ccccff";
+  }
 }

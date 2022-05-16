@@ -14,6 +14,9 @@
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<commons-io.version>2.11.0</commons-io.version>
 		<commons-lang3.version>3.12.0</commons-lang3.version>
+		<jaxb.version>2.3.1</jaxb.version>
+		<jaxb-maven.version>2.5.0</jaxb-maven.version>
+		<jgrapht.version>1.5.1</jgrapht.version>
 		<junit.version>5.8.2</junit.version>
 		<log4j.version>1.2.17</log4j.version>
 		<lombok.version>1.18.24</lombok.version>

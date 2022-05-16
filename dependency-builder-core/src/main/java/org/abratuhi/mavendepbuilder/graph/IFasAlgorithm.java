@@ -6,5 +6,5 @@ import java.util.List;
  * @author Alexei Bratuhin
  */
 public interface IFasAlgorithm {
-	<S, T> List<Edge<S, T>> proceed(Graph<S, T> graph);
+  <S, T> List<Edge<S, T>> proceed(Graph<S, T> graph);
 }

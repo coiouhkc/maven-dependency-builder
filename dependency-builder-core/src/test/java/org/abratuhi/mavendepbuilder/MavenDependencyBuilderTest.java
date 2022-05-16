@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -17,16 +18,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MavenDependencyBuilderTest {
 
 	@Test
-	void testProjectEquals() {
-		Project p1 = new Project(1, "project", new TreeSet<>());
-		Project p2 = new Project(2, "project", null);
+	public void testProjectEquals() {
+		Project p1 = new Project(1, "project", new HashMap<>(), new TreeSet<>(), true, false);
+		Project p2 = new Project(2, "project", new HashMap<>(), null, false, false);
 		assertEquals(p1, p2);
 	}
 
 	@Test
-	void testProjectNotEquals() {
-		Project p1 = new Project(1, "project1", null);
-		Project p2 = new Project(1, "project2", null);
+	public void testProjectNotEquals() {
+		Project p1 = new Project(1, "project1", new HashMap<>(), null, false, false);
+		Project p2 = new Project(1, "project2", new HashMap<>(), null, false, false);
 		assertNotEquals(p1, p2);
 	}
 
@@ -53,5 +54,15 @@ public class MavenDependencyBuilderTest {
 		Set<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-0"));
 		assertNotNull(projects);
 		assertTrue(projects.isEmpty());
+	}
+
+	@Test
+	public void testVisitParentInDependencies() throws IOException {
+		MavenDependencyBuilder mdb = new MavenDependencyBuilder();
+		Set<Project> projects = mdb.visitDirectory(new File("src/test/resources/payara-issue-959-deps-1"));
+		assertNotNull(projects);
+		Project projectApi = projects.stream().filter(project -> project.getName().contains("api")).findFirst().orElse(null);
+		assertNotNull(projectApi);
+		assertTrue(projectApi.getDependencies().containsKey("org.abratuhi:payara-issue-959"));
 	}
 }
