@@ -18,15 +18,23 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class JFashT {
 
-  public <V, E> List<E> proceed(DefaultDirectedWeightedGraph<V, E> graph) {
-    List<E> result = new ArrayList<>();
+  public <V> List<DependencyEdge> proceed(
+      DefaultDirectedWeightedGraph<V, DependencyEdge> graph
+  ) {
+    List<DependencyEdge> result = new ArrayList<>();
 
-    // FIXME: operate on graph clone/copy
-    //DefaultDirectedWeightedGraph<V, E> copy = new DefaultDirectedWeightedGraph<>();
-    //
-    //Graphs.addGraph(copy, graph);
+    // clone/copy
+    DefaultDirectedWeightedGraph<V, DependencyEdge> copy =
+        new DefaultDirectedWeightedGraph<>(DependencyEdge.class);
 
-    DefaultDirectedWeightedGraph<V, E> copy = graph;
+    graph.vertexSet().forEach(copy::addVertex);
+
+    graph.edgeSet().forEach(e -> {
+      DependencyEdge ec = copy.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e));
+      ec.setLabel(ec.getLabel());
+      copy.setEdgeWeight(ec, graph.getEdgeWeight(e));
+    });
+    // clone/copy - end
 
     Function<V, Boolean> isSource = v -> copy.inDegreeOf(v) == 0;
     Function<V, Boolean> isSink = v -> copy.outDegreeOf(v) == 0;

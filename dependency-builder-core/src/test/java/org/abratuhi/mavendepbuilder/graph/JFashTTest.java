@@ -1,7 +1,6 @@
 package org.abratuhi.mavendepbuilder.graph;
 
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import org.jgrapht.graph.DefaultEdge;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,28 +11,28 @@ public class JFashTTest {
 
   @Test
   void testEmpty() {
-    DefaultDirectedWeightedGraph<String, DefaultEdge> g = new DefaultDirectedWeightedGraph<>(DefaultEdge.class);
-    List<DefaultEdge> actual = JFashT.proceed(g);
+    DefaultDirectedWeightedGraph<String, DependencyEdge> g = new DefaultDirectedWeightedGraph<>(DependencyEdge.class);
+    List<DependencyEdge> actual = JFashT.proceed(g);
     assertNotNull(actual);
     assertTrue(actual.isEmpty(), "Feedback arc set of an empty graph must be empty");
   }
 
   @Test
   void testOneNode() {
-    DefaultDirectedWeightedGraph<String, DefaultEdge> g = new DefaultDirectedWeightedGraph<>(DefaultEdge.class);
+    DefaultDirectedWeightedGraph<String, DependencyEdge> g = new DefaultDirectedWeightedGraph<>(DependencyEdge.class);
     g.addVertex("a");
-    List<DefaultEdge> actual = JFashT.proceed(g);
+    List<DependencyEdge> actual = JFashT.proceed(g);
     assertNotNull(actual);
     assertTrue(actual.isEmpty(), "Feedback arc set of an graph with one node and no edges must be empty");
   }
 
   @Test
   void testOneNodeLoop() {
-    DefaultDirectedWeightedGraph<String, DefaultEdge> g = new DefaultDirectedWeightedGraph<>(DefaultEdge.class);
+    DefaultDirectedWeightedGraph<String, DependencyEdge> g = new DefaultDirectedWeightedGraph<>(DependencyEdge.class);
     g.addVertex("a");
     g.addEdge("a", "a");
     g.setEdgeWeight(g.getEdge("a", "a"), 1);
-    List<DefaultEdge> actual = JFashT.proceed(g);
+    List<DependencyEdge> actual = JFashT.proceed(g);
 
     assertNotNull(actual);
     assertEquals(1, actual.size(), "Feedback arc set of an one node one arc loop must contain that arc");
