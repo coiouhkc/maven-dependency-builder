@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.abratuhi.mavendepbuilder.graph.DependencyEdge;
-import org.abratuhi.mavendepbuilder.graph.Graph;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
-import org.abratuhi.mavendepbuilder.graph.Node;
 import org.abratuhi.mavendepbuilder.jaxb.Dependency;
 import org.abratuhi.mavendepbuilder.jaxb.Model;
 import org.abratuhi.mavendepbuilder.layout.csv.CSVLayout;
@@ -104,7 +102,8 @@ public class MavenDependencyBuilder {
     switch (dependencyType) {
       case PROJECT:
         return (DefaultDirectedWeightedGraph<S, DependencyEdge>) buildProjectDependencyGraph(projects);
-//		case PACKAGE: return (Graph<S, T>) buildPackageDependencyGraph(projects);
+      case PACKAGE:
+        return (DefaultDirectedWeightedGraph<S, DependencyEdge>) buildPackageDependencyGraph(projects);
       default:
         throw new IllegalArgumentException("Unsupported dependency type: " + dependencyType);
     }
@@ -157,7 +156,7 @@ public class MavenDependencyBuilder {
     return g;
   }
 
-  /* default */ Graph<JavaPackage, String> buildPackageDependencyGraph(Set<Project> projects) {
+  /* default */ DefaultDirectedWeightedGraph<JavaPackage, DependencyEdge> buildPackageDependencyGraph(Set<Project> projects) {
     List<JavaPackage> packages = projects.stream().map(Project::getPackages).flatMap(Collection::stream).collect(
         Collectors.toList());
     Map<JavaPackage, Map<JavaPackage, Set<String>>> fromToClasses = new HashMap<>();
@@ -172,20 +171,18 @@ public class MavenDependencyBuilder {
         })
     );
 
-    Graph<JavaPackage, String> result = new Graph<>();
-    packages.forEach(javaPackage -> result.getNodes().add(new Node<>(javaPackage, new ArrayList<>())));
+    DefaultDirectedWeightedGraph<JavaPackage, DependencyEdge> g = new DefaultDirectedWeightedGraph<>(DependencyEdge.class);
+    packages.forEach(g::addVertex);
     fromToClasses.entrySet().forEach(fromEntry ->
         fromEntry.getValue().entrySet().forEach(toEntry -> {
-          Node<JavaPackage, String> from = result.getByNodeObject(fromEntry.getKey());
-          Node<JavaPackage, String> to = result.getByNodeObject(toEntry.getKey());
-          if (!from.equals(to)) {
-            result.addEdge(StringUtils
-                .join(new ArrayList<>(toEntry.getValue()),
-                    ","), from, to, toEntry.getValue().size());
+          if (!fromEntry.equals(toEntry)) {
+            DependencyEdge de = g.addEdge(fromEntry.getKey(), toEntry.getKey());
+            g.setEdgeWeight(de, fromEntry.getValue().size());
           }
         })
     );
-    return result;
+
+    return g;
   }
 
   /**
