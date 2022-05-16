@@ -1,7 +1,7 @@
 package org.abratuhi.mavendepbuilder.layout.csv;
 
 import com.opencsv.CSVWriter;
-import org.abratuhi.mavendepbuilder.graph.Edge;
+import org.abratuhi.mavendepbuilder.graph.DependencyEdge;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.layout.ILayout;
 import org.abratuhi.mavendepbuilder.options.LayoutOptions;
@@ -19,8 +19,8 @@ import java.util.List;
 public class CSVLayout implements ILayout {
 	@Override
 	public <S extends Graphable, T> void doLayout(
-			DefaultDirectedGraph<S, DefaultEdge> graph,
-			List<Edge> violations,
+			DefaultDirectedGraph<S, DependencyEdge> graph,
+			List<DependencyEdge> violations,
 			File toFile,
 			LayoutOptions layoutOptions
 	) throws IOException {
@@ -35,10 +35,10 @@ public class CSVLayout implements ILayout {
 			violation ->
 				csvWriter.writeNext(
 					new String[]{
-						violation.getFrom().getObject().toString(),
-						violation.getTo().getObject().toString(),
-						violation.getWeight().toString(),
-						violation.getObject().toString()}));
+						graph.getEdgeSource(violation).getLabel(),
+						graph.getEdgeTarget(violation).getLabel(),
+						String.valueOf(violation.getWeight()),
+						violation.getLabel()}));
 		csvWriter.flush();
 		csvWriter.close();
 	}

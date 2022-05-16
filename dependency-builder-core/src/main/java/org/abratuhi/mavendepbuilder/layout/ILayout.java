@@ -1,5 +1,6 @@
 package org.abratuhi.mavendepbuilder.layout;
 
+import org.abratuhi.mavendepbuilder.graph.DependencyEdge;
 import org.abratuhi.mavendepbuilder.graph.Edge;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.options.LayoutOptions;
@@ -15,8 +16,8 @@ import java.util.List;
  */
 public interface ILayout {
   <S extends Graphable, T> void doLayout(
-      DefaultDirectedGraph<S, DefaultEdge> graph,
-      List<Edge> violations,
+      DefaultDirectedGraph<S, DependencyEdge> graph,
+      List<DependencyEdge> violations,
       File toFile,
       LayoutOptions layoutOptions
   ) throws IOException;

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.abratuhi.mavendepbuilder.graph.Edge;
+import org.abratuhi.mavendepbuilder.graph.DependencyEdge;
 import org.abratuhi.mavendepbuilder.graph.Graph;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.graph.Node;
@@ -23,7 +23,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,9 +51,9 @@ public class MavenDependencyBuilder {
 
   private static final Logger LOGGER = Logger.getLogger(MavenDependencyBuilder.class);
 
-  public <S extends Graphable, T> void layout(
-      DefaultDirectedGraph<S, DefaultEdge> dependencyGraph,
-      List<Edge> violations,
+  public <S extends Graphable> void layout(
+      DefaultDirectedGraph<S, DependencyEdge> dependencyGraph,
+      List<DependencyEdge> violations,
       File toFile,
       LayoutOptions layoutOptions
   ) throws IOException {
@@ -100,17 +100,17 @@ public class MavenDependencyBuilder {
         .orElse(null);
   }
 
-  /* default */ <S extends Graphable, T> DefaultDirectedGraph<S, DefaultEdge> buildDependencyGraph(Set<Project> projects, LayoutOptions.DependencyType dependencyType) {
+  /* default */ <S extends Graphable> DefaultDirectedWeightedGraph<S, DependencyEdge> buildDependencyGraph(Set<Project> projects, LayoutOptions.DependencyType dependencyType) {
     switch (dependencyType) {
       case PROJECT:
-        return (DefaultDirectedGraph<S, DefaultEdge>) buildProjectDependencyGraph(projects);
+        return (DefaultDirectedWeightedGraph<S, DependencyEdge>) buildProjectDependencyGraph(projects);
 //		case PACKAGE: return (Graph<S, T>) buildPackageDependencyGraph(projects);
       default:
         throw new IllegalArgumentException("Unsupported dependency type: " + dependencyType);
     }
   }
 
-  /* default */ DefaultDirectedGraph<Project, DefaultEdge> buildProjectDependencyGraph(Set<Project> projects) {
+  /* default */ DefaultDirectedWeightedGraph<Project, DependencyEdge> buildProjectDependencyGraph(Set<Project> projects) {
     Map<String, Project> projectMap = projects.stream().collect(Collectors.toMap(Project::getName, Function.identity()));
     projects.stream()
         .flatMap(project -> project.getDependencies().values().stream())
@@ -147,7 +147,7 @@ public class MavenDependencyBuilder {
         });
 
 
-    DefaultDirectedGraph<Project, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+    DefaultDirectedWeightedGraph<Project, DependencyEdge> g = new DefaultDirectedWeightedGraph<>(DependencyEdge.class);
     projectMap.values().forEach(g::addVertex);
     projectMap.values().forEach(project ->
         project.getDependencies().values()

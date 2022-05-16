@@ -1,12 +1,15 @@
 package org.abratuhi.mavendepbuilder;
 
+import org.abratuhi.mavendepbuilder.graph.DependencyEdge;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
+import org.abratuhi.mavendepbuilder.graph.JFashT;
 import org.abratuhi.mavendepbuilder.model.Project;
 import org.abratuhi.mavendepbuilder.options.LayoutOptions;
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultEdge;
 
 import java.io.File;
@@ -77,13 +80,12 @@ public class MavenDependencyBuilderCli {
 
     Set<Project> projects = mdb.visit(new File(in));
 
-    DefaultDirectedGraph<? extends Graphable, DefaultEdge> dependencyGraph = mdb.buildDependencyGraph(projects, dependencyType);
+    DefaultDirectedWeightedGraph<? extends Graphable, DependencyEdge> dependencyGraph = mdb.buildDependencyGraph(projects, dependencyType);
 
-    // FIXME: potentially destructive function
-//		if (checkForViolations) {
-//			List<Edge<Graphable, Object>> violations = new Fash().proceed(dependencyGraph);
-//			violations.forEach(violation -> LOGGER.warn(violation.toString()));
-//		}
+		if (checkForViolations) {
+			List<DependencyEdge> violations = JFashT.proceed(dependencyGraph);
+			violations.forEach(violation -> LOGGER.warn(violation.toString()));
+		}
 
     mdb.layout(
         dependencyGraph,

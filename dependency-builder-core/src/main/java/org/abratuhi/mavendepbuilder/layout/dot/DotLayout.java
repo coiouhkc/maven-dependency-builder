@@ -1,13 +1,12 @@
 package org.abratuhi.mavendepbuilder.layout.dot;
 
-import org.abratuhi.mavendepbuilder.graph.Edge;
+import org.abratuhi.mavendepbuilder.graph.DependencyEdge;
 import org.abratuhi.mavendepbuilder.graph.Graphable;
 import org.abratuhi.mavendepbuilder.layout.ILayout;
 import org.abratuhi.mavendepbuilder.layout.LayoutUtil;
 import org.abratuhi.mavendepbuilder.options.LayoutOptions;
 import org.apache.commons.io.FileUtils;
 import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +17,7 @@ import java.util.List;
  */
 public class DotLayout implements ILayout {
   @Override
-  public <S extends Graphable, T> void doLayout(DefaultDirectedGraph<S, DefaultEdge> graph, List<Edge> violations, File toFile, LayoutOptions layoutOptions)
+  public <S extends Graphable, T> void doLayout(DefaultDirectedGraph<S, DependencyEdge> graph, List<DependencyEdge> violations, File toFile, LayoutOptions layoutOptions)
       throws IOException {
     StringBuffer sb = new StringBuffer();
 
