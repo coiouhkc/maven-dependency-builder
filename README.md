@@ -38,6 +38,8 @@ mvn org.abratuhi:dependency-builder-maven-plugin:1.0-SNAPSHOT:mavendepbuilder -D
 **_Work-In-Progress!_** - this tool is currently under heavy development, please report any bugs or feature requests on
 Github.
 
+Also - obviously relies on `mvn dependency:analyze` not returning any warnings.
+
 # Known issues
 
 * missing support for projects stored in not uniquely named directories
